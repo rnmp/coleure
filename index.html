@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Coleure</title>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="./application.css" />
+  <link id="dynamic-favicon" rel="shortcut icon" type="image/png" href="/favicon.png" />
+
+  <script src="./javascripts/color.min.js"></script>
+  <script data-main="./javascripts/coleure" src="./javascripts/require.js"></script>
+  <!-- <link rel="preconnect" href="https://fonts.googleapis.com"> -->
+  <!-- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> -->
+  <!-- <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet"> -->
+</head>
+<body id="app">
+  <h1 id="logo">
+    <div class="text">Coleure</div>
+    <div class="color-code">
+      <a id="format_status"><span id="current_color_code">Hover any color</span>
+        <svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg">
+          <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <path d="M19.3103448,12.1428571 L19.3103448,7.85714286 L16.4737931,7.85714286 C16.3227586,7.14285714 16.1117241,6.84142857 15.8475862,6.35142857 L17.8593103,4.29857143 L15.1289655,1.48714286 L13.1793103,3.57928571 C12.7055172,3.30357143 12.4137931,3.09571429 11.7241379,2.93857143 L11.7241379,0 L7.5862069,0 L7.5862069,2.93857143 C6.89655172,3.09571429 6.61931034,3.31285714 6.14482759,3.58785714 L4.16758621,1.50285714 L1.45586207,4.33071429 L3.47793103,6.35142857 C3.2137931,6.84142857 3.01310345,7.14285714 2.86206897,7.85714286 L0,7.85714286 L0,12.1428571 L2.86206897,12.1428571 C3.01310345,12.8571429 3.22275862,13.1464286 3.48827586,13.6385714 L1.47517241,15.6842857 L4.20551724,18.4928571 L6.14482759,16.3985714 C6.61931034,16.6728571 6.89655172,16.88 7.5862069,17.0371429 L7.5862069,20 L11.7241379,20 L11.7241379,17.0371429 C12.4137931,16.8807143 12.7034483,16.6628571 13.1793103,16.3885714 L15.1606897,18.4735714 L17.8751724,15.6457143 L15.8558621,13.6385714 C16.12,13.1464286 16.3227586,12.8571429 16.4737931,12.1428571 L19.3103448,12.1428571 L19.3103448,12.1428571 Z M9.66758621,13.37 C7.86413793,13.37 6.40275862,11.8557143 6.40275862,9.98785714 C6.40275862,8.12 7.86413793,6.60571429 9.66758621,6.60571429 C11.4703448,6.60571429 12.9317241,8.12 12.9317241,9.98785714 C12.9317241,11.8557143 11.4703448,13.37 9.66758621,13.37 L9.66758621,13.37 Z" id="settingsIcon" fill="#fff"></path>
+          </g>
+        </svg></a>
+        <div id="formatSettings" class="format-settings">
+          <p><input id="clipboard_handler" readonly></input></p>
+          <p>
+            <button id="hex" class="set-format option join">HEX</button><button id="rgb" class="set-format option join">RGB</button><button id="hsl" class="set-format option join">HSL</button>
+          </p>
+          <p>
+            Copy colors with <kbd>⌘ + C</kbd> or <kbd>Ctrl. + C</kbd>
+          </p>
+        </div>
+      </div>
+    </h1>
+    <div id="compareModeDialog" class="mode-dialog">Select the color you want to compare with. <button id="exitCompareModeButton" class="secondary">Done</button></div>
+    <div id="mixModeDialog" class="mode-dialog">Select the color you want to mix with. <button id="exitMixModeButton" class="secondary">Done</button></div>
+    <main>
+      <div id="colors"></div>
+      <aside id="panels">
+        <section id="inspector">
+          <div id="preview">
+            <div id="mixPanel">
+              <button id="mixButton">Mix</button>
+              <div id="mixControls">
+                <input id="mixBalance" type="range" min="0.01" max="0.99" step="0.01" value="0.5">
+              </div>
+              <div id="mixResult">
+                <span id="mixWeightA">50%</span>
+                <span id="mixWeightB">50%</span>
+                <button id="cancelMix" class="join">Cancel</button><button id="selectMix" class="color">Select</button>
+              </div>
+            </div>
+            <div id="subjects" class="clear"></div>
+          </div>
+          <div id="tests" class="clear"></div>
+        </section>
+        <div class="the-rest">
+          <section class="subject-options">
+            <div class="column">
+              <a id="compareModeButton" class="block-button"><i class="compare-icon"></i><br>Compare</a>
+              <a id="editPanelButton" class="block-button"><i class="edit-icon"></i><br>Edit</a>
+            </div>
+            <div class="column">
+              <a id="mixModeButton" class="block-button"><i class="mix-icon"></i><br>Mix</a>
+              <a id="addToPaletteButton" class="block-button"><i class="add-to-palette-icon"></i><br>Add</a>
+              <a id="removeButton" class="block-button"><i class="remove-icon"></i><br>Remove</a>
+            </div>
+          </section>
+          <aside id="editPanel" class="color-editor">
+            <section class="top">
+              <header><label for="#">Code*</label></header>
+              <div><input type="text" id="colorCode"></div>
+            </section>
+            <section>
+              <header><label for="colorHueValue">H</label><input type="number" min="1" max="360" id="colorHueValue"></header>
+              <div><input id="colorHueRange" type="range" min="1" max="360" step="1"></div>
+            </section>
+            <section>
+              <header><label for="colorSaturationValue">S</label><input type="number" min="1" max="100" id="colorSaturationValue"></header>
+              <div><input id="colorSaturationRange" type="range" min="0" max="100" step="1"></div>
+            </section>
+            <section>
+              <header><label for="colorLightValue">L</label><input type="number" min="1" max="100" id="colorLightValue"></header>
+              <div><input id="colorLightRange" type="range" min="0" max="100" step="1"></div>
+            </section>
+            <section>
+              <header><label for="#">Name</label></header>
+              <div><input type="text" id="colorName"></div>
+            </section>
+            <section class="push-header">
+              <button id="exitEditPanelButton" class="secondary">Done</button>
+            </section>
+          </aside>
+        </div>
+      </aside>
+      <section id="palette">
+        <div id="drop-message" class="dropzone">
+          <div class="content">
+            <p><i class="drop"></i><br>Drop your favorite<br>colors here</p>
+            <hr>
+            <p>Brought to you<br>by <a target="_blank" href="https://rolando.is" id="learnMoreLink">Rolando</a></p>
+          </div>
+        </div>
+        <div id="palette_colors" class="clear b10"></div>
+        <header class="select">
+          <div class="palette-buttons">
+            <a class="button" id="shareButton" style="display: none;">Preview</a>
+            <a class="button secondary" id="renameButton" style="display: none;">Rename</a>
+          </div>
+          <h1 class="subtitle">
+            <span id="activePalette" class="active-palette">New</span>
+          </h1>
+          <h2>Palette</h2>
+        </header>
+      </section>
+    </main>
+</body>
+</html>
