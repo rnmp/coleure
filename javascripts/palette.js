@@ -159,11 +159,11 @@ define(['./goodies', './settings'], function (_, settings) {
     el.outerHTML = template(color);
   };
   function initializePalette() {
-    const currentPaletteId = localStorage.get('currentPaletteId')
+    const currentPaletteId = localStorage.getItem('currentPaletteId')
     if (!currentPaletteId) {
       return
     }
-    const storage = localStorage.get('coleure')
+    const storage = localStorage.getItem('coleure')
     if (!storage) {
       return
     }
