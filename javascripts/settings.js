@@ -8,6 +8,5 @@ define(['./goodies'], function (_) {
   }
   return data = {
     format: 'hex',
-    upgradeNotice: true
   };
 });
