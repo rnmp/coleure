@@ -216,6 +216,7 @@ svg {
   overflow-y: auto;
   display: flex;
   flex-wrap: wrap;
+  padding-bottom: 8.333333%;
 }
 #colors .item {
   width: 8.333333%;
