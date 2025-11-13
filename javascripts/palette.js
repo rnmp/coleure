@@ -1,8 +1,42 @@
 define(['./goodies'], function (_) {
+  let colorData = { palettes: [] }
+  try {
+    const parsedColorData = JSON.parse(localStorage.getItem('coleure'))
+    if (parsedColorData) {
+      colorData = parsedColorData
+    }
+  } catch (e) {
+  }
+
+  function getSnapshot() {
+    return JSON.parse(JSON.stringify(colorData))
+  }
+
+  function commit(newData) {
+    localStorage.setItem("coleure", JSON.stringify(newData))
+    colorData = newData
+  }
+
+  function getActivePaletteId() {
+    return localStorage.getItem('activePaletteId')
+  }
+
+  function setActivePaletteId(id) {
+    return localStorage.setItem('activePaletteId', id)
+  }
+
+  function getActivePalette() {
+    const activePaletteId = getActivePaletteId()
+    if (!activePaletteId) {
+      return
+    }
+    const snapshot = getSnapshot()
+    return snapshot.palettes.find(p => p.id === activePaletteId)
+  }
+
   const dropzone = _.id('palette')
   const paletteColors = _.id('palette_colors')
   const dropMessage = _.id('drop-message')
-  let activePalette = undefined
   let colorOrigin = undefined
 
   function colorDrag(event) {
@@ -25,6 +59,12 @@ define(['./goodies'], function (_) {
   }
 
   function updateTitle() {
+    const activePalette = getActivePalette()
+    if (!activePalette) {
+      _.id('activePalette').textContent = 'New'
+      return
+    }
+
     editableText(_.id('activePalette'), activePalette.name, (newValue) => {
       const finalValue = newValue.trim()
       if (!finalValue) {
@@ -37,56 +77,28 @@ define(['./goodies'], function (_) {
     })
   }
 
-  let colorData = { palettes: [] }
-  try {
-    const parsedColorData = JSON.parse(localStorage.getItem('coleure'))
-    if (parsedColorData) {
-      colorData = parsedColorData
-    }
-  } catch (e) {
-  }
-
-  function getSnapshot() {
-    return JSON.parse(JSON.stringify(colorData))
-  }
-
-  function commit(newData) {
-    localStorage.setItem("coleure", JSON.stringify(newData))
-    colorData = newData
-  }
 
   function addColor(data) {
-    const counter = localStorage.getItem('paletteNameCounter') || '1'
-
-    activePalette = activePalette || {
-      id: crypto.randomUUID(),
-      name: `No. ${counter}`,
-      colors: []
-    }
-
     const newColor = {
       ...data,
       id: crypto.randomUUID(),
-      palette_id: activePalette.id,
-    }
-
-    localStorage.setItem('currentPaletteId', activePalette.id)
-
-    activePalette = {
-      ...activePalette,
-      colors: [
-        newColor,
-        ...(activePalette.colors || []),
-      ]
     }
 
     const snapshot = getSnapshot()
-    const existingPalette = snapshot.palettes.find(p => p.id === activePalette.id)
+    const activePaletteId = getActivePaletteId()
+    const existingPalette = snapshot.palettes.find(p => p.id === activePaletteId)
     if (existingPalette) {
-      existingPalette.colors = activePalette.colors
+      existingPalette.colors = [newColor, ...(existingPalette.colors || [])]
     } else {
-      snapshot.palettes.push(activePalette)
+      const counter = localStorage.getItem('paletteNameCounter') || '1'
+      const newPaletteId = crypto.randomUUID()
+      snapshot.palettes.push({
+        id: newPaletteId,
+        name: `No. ${counter}`,
+        colors: [newColor]
+      })
       localStorage.setItem('paletteNameCounter', JSON.stringify(parseInt(counter) + 1))
+      setActivePaletteId(newPaletteId)
     }
     commit(snapshot)
 
@@ -104,7 +116,10 @@ define(['./goodies'], function (_) {
     }
     event.preventDefault()
     const data = JSON.parse(event.dataTransfer.getData('text'))
-    data.index = activePalette?.colors.length
+    const activePalette = getActivePalette()
+    if (activePalette) {
+      data.index = activePalette.colors.length
+    }
     addColor(data)
   }
 
@@ -131,6 +146,7 @@ define(['./goodies'], function (_) {
   }
 
   function removeColor(index) {
+    const activePalette = getActivePalette()
     if (!activePalette) {
       return
     }
@@ -156,15 +172,20 @@ define(['./goodies'], function (_) {
 
   function populateColors() {
     paletteColors.innerHTML = ''
-    for (let ci = 0; ci < activePalette.colors.length; ci++) {
-      color = activePalette.colors[ci]
-      if (!color.mixed) {
-        color.mixed = false
+
+    const activePalette = getActivePalette()
+    if (activePalette) {
+      for (let ci = 0; ci < activePalette.colors.length; ci++) {
+        color = activePalette.colors[ci]
+        if (!color.mixed) {
+          color.mixed = false
+        }
+        color.index = ci
+        color.origin = "palette"
+        paletteColors.append(makeColor(color))
       }
-      color.index = ci
-      color.origin = "palette"
-      paletteColors.append(makeColor(color))
     }
+
     if (paletteColors.children.length) {
       return _.hide(dropMessage)
     } else {
@@ -229,18 +250,7 @@ define(['./goodies'], function (_) {
     return node
   }
 
-
   function initializePalette() {
-    const currentPaletteId = localStorage.getItem('currentPaletteId')
-    if (!currentPaletteId) {
-      return
-    }
-    const existingPalette = colorData.palettes.find(p => p.id === currentPaletteId)
-    if (!existingPalette) {
-      return
-    }
-
-    activePalette = existingPalette
     populateColors()
     updateTitle()
   }
