@@ -96,6 +96,9 @@ define(['./goodies'], function (_) {
   }
 
   function colorDrop(event) {
+    if (colorOrigin === 'palette') {
+      return
+    }
     event.preventDefault()
     const data = JSON.parse(event.dataTransfer.getData('text'))
     data.index = activePalette?.colors.length
