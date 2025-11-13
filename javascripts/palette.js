@@ -74,6 +74,7 @@ define(['./goodies'], function (_) {
       const existingPalette = snapshot.palettes.find(p => p.id === activePalette.id)
       existingPalette.name = finalValue
       commit(snapshot)
+      populatePalettes()
     })
   }
 
@@ -100,7 +101,9 @@ define(['./goodies'], function (_) {
       localStorage.setItem('paletteNameCounter', JSON.stringify(parseInt(counter) + 1))
       setActivePaletteId(newPaletteId)
     }
+
     commit(snapshot)
+    populatePalettes()
 
     updateTitle()
 
@@ -157,6 +160,7 @@ define(['./goodies'], function (_) {
     existingPalette.colors = existingPalette.colors.filter(c => c.id !== activeColor.id)
     activePalette.colors = existingPalette.colors
     commit(snapshot)
+    populatePalettes()
 
     const visualColor = paletteColors.children.item(index)
     visualColor.classList.add('deleted')
@@ -250,6 +254,80 @@ define(['./goodies'], function (_) {
     return node
   }
 
+  function removePalette(palette) {
+    const snapshot = getSnapshot()
+    snapshot.palettes = snapshot.palettes.filter(p => p.id !== palette.id)
+    commit(snapshot)
+
+    populateColors()
+    populatePalettes()
+    updateTitle()
+  }
+
+  function makePaletteStrip(palette) {
+    const paletteStrip = _.create('article')
+    paletteStrip.style.paddingTop = '16px'
+
+    const actionBar = _.create('header')
+    actionBar.style.display = 'flex'
+    actionBar.style.justifyContent = 'space-between'
+    paletteStrip.append(actionBar)
+
+    const paletteTitle = _.create('h1')
+    paletteTitle.textContent = palette.name
+    actionBar.append(paletteTitle)
+
+    const deleteButton = _.create('button')
+    deleteButton.className = 'secondary'
+    deleteButton.textContent = 'd'
+    deleteButton.onclick = () => {
+      removePalette(palette)
+    }
+    actionBar.append(deleteButton)
+
+    const colors = _.create('div')
+    colors.style.display = 'grid'
+    colors.style.gridAutoFlow = 'column'
+    colors.style.height = '48px'
+
+    for (const color of palette.colors) {
+      colors.append(makeColor(color))
+    }
+    paletteStrip.append(colors)
+
+    paletteStrip.onclick = () => {
+      setActivePaletteId(palette.id)
+      populateColors()
+      populatePalettes()
+      updateTitle()
+    }
+
+    return paletteStrip
+  }
+
+
+  function populatePalettes() {
+    const palettesContainer = _.id('palettes')
+    palettesContainer.innerHTML = ''
+
+    const newPalette = _.create('button')
+    newPalette.textContent = 'New palette'
+    newPalette.onclick = () => {
+      setActivePaletteId('')
+      populateColors()
+      updateTitle()
+    }
+    palettesContainer.append(newPalette)
+
+
+    const palettes = getSnapshot().palettes
+
+    for (const palette of palettes) {
+      const paletteStrip = makePaletteStrip(palette)
+      palettesContainer.append(paletteStrip)
+    }
+  }
+
   function initializePalette() {
     populateColors()
     updateTitle()
@@ -271,6 +349,7 @@ define(['./goodies'], function (_) {
       _.listen(_.id('colors'), 'dragover', paletteColorOver)
       _.listen(_.id('colors'), 'drop', paletteColorDrop)
 
+      populatePalettes()
       initializePalette()
     }
   }

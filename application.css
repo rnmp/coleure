@@ -225,10 +225,9 @@ svg {
 
 /* — Conditions */
 .active-panels #panels {
-  width: 25%;
+  width: 420px;
   opacity: 1;
   transform: scale(1);
-  display: block;
 }
 
 /* Colors */
@@ -259,40 +258,40 @@ svg {
 }
 
 #panels {
-  width: 0%;
+  width: 0;
   z-index: 2;
   opacity: 0;
-  background: #232323;
   color: #fff;
   transform: scale(1.4);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+#palettes {
+  border-top: 2px solid #444;
+  padding-top: 20px;
+  padding-left: 20px;
+  flex: 1;
+  overflow: auto;
 }
 
-.subject-options {
-  overflow: hidden;
-}
-.subject-options .column {
-  float: left;
-  width: 50%;
-}
-.subject-options .column:nth-child(2n-1) {
-  padding-right: 10px;
-}
-.subject-options .column:nth-child(2n) {
-  padding-left: 10px;
+#color-tools {
+  display: flex;
+  padding: 0.5rem 0 0.5rem 20px;
 }
 
 .block-button {
   display: block;
-  margin-bottom: 20px;
-  padding: 10px 15px;
   text-align: center;
   font-size: 14px;
   font-weight: bold;
   color: #fff;
-  border: 2px solid #333;
+  flex: 1;
+  padding: 0.5rem 0;
 }
+
 .block-button.active {
-  background: #333;
+  background: #444;
 }
 
 button#save-palette {
@@ -306,7 +305,7 @@ button#save-palette {
 }
 
 
-#palette, .the-rest {
+#palette {
   padding: 20px;
 }
 #palette, #palette .select,
@@ -397,9 +396,6 @@ button#save-palette {
   }
   .mix-mark {
     color: #ccc;
-  }
-  .the-rest {
-    padding-top: 20px;
   }
   .project-info {
     border-top: 2px solid #444;

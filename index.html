@@ -56,44 +56,40 @@
         </div>
         <div id="tests" class="clear"></div>
       </section>
-      <div class="the-rest">
-        <section class="subject-options">
-          <div class="column">
-            <a id="compareModeButton" class="block-button"><i class="compare-icon"></i><br>Compare</a>
-            <a id="editPanelButton" class="block-button"><i class="edit-icon"></i><br>Edit</a>
-          </div>
-          <div class="column">
-            <a id="mixModeButton" class="block-button"><i class="mix-icon"></i><br>Mix</a>
-            <a id="addToPaletteButton" class="block-button"><i class="add-to-palette-icon"></i><br>Add</a>
-            <a id="removeButton" class="block-button"><i class="remove-icon"></i><br>Remove</a>
-          </div>
+      <section id="color-tools">
+        <a id="compareModeButton" class="block-button"><i class="compare-icon"></i><br>Compare</a>
+        <a id="mixModeButton" class="block-button"><i class="mix-icon"></i><br>Mix</a>
+        <a id="editPanelButton" class="block-button"><i class="edit-icon"></i><br>Edit</a>
+        <a id="addToPaletteButton" class="block-button"><i class="add-to-palette-icon"></i><br>Add</a>
+        <a id="removeButton" class="block-button"><i class="remove-icon"></i><br>Remove</a>
+      </section>
+      <section id="palettes">
+      </section>
+      <aside id="editPanel" class="color-editor">
+        <section class="top">
+          <header><label for="#">Code*</label></header>
+          <div><input type="text" id="colorCode"></div>
         </section>
-        <aside id="editPanel" class="color-editor">
-          <section class="top">
-            <header><label for="#">Code*</label></header>
-            <div><input type="text" id="colorCode"></div>
-          </section>
-          <section>
-            <header><label for="colorHueValue">H</label><input type="number" min="1" max="360" id="colorHueValue"></header>
-            <div><input id="colorHueRange" type="range" min="1" max="360" step="1"></div>
-          </section>
-          <section>
-            <header><label for="colorSaturationValue">S</label><input type="number" min="1" max="100" id="colorSaturationValue"></header>
-            <div><input id="colorSaturationRange" type="range" min="0" max="100" step="1"></div>
-          </section>
-          <section>
-            <header><label for="colorLightValue">L</label><input type="number" min="1" max="100" id="colorLightValue"></header>
-            <div><input id="colorLightRange" type="range" min="0" max="100" step="1"></div>
-          </section>
-          <section>
-            <header><label for="#">Name</label></header>
-            <div><input type="text" id="colorName"></div>
-          </section>
-          <section class="push-header">
-            <button id="exitEditPanelButton" class="secondary">Done</button>
-          </section>
-        </aside>
-      </div>
+        <section>
+          <header><label for="colorHueValue">H</label><input type="number" min="1" max="360" id="colorHueValue"></header>
+          <div><input id="colorHueRange" type="range" min="1" max="360" step="1"></div>
+        </section>
+        <section>
+          <header><label for="colorSaturationValue">S</label><input type="number" min="1" max="100" id="colorSaturationValue"></header>
+          <div><input id="colorSaturationRange" type="range" min="0" max="100" step="1"></div>
+        </section>
+        <section>
+          <header><label for="colorLightValue">L</label><input type="number" min="1" max="100" id="colorLightValue"></header>
+          <div><input id="colorLightRange" type="range" min="0" max="100" step="1"></div>
+        </section>
+        <section>
+          <header><label for="#">Name</label></header>
+          <div><input type="text" id="colorName"></div>
+        </section>
+        <section class="push-header">
+          <button id="exitEditPanelButton" class="secondary">Done</button>
+        </section>
+      </aside>
     </aside>
     <section id="palette">
       <div id="drop-message" class="dropzone">
