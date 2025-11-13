@@ -47,7 +47,6 @@ define(['./goodies'], function (_) {
   }
 
   function addColor(data) {
-    console.log(activePalette)
     activePalette = activePalette || {
       id: crypto.randomUUID(),
       name: 'New Palette',
@@ -121,13 +120,10 @@ define(['./goodies'], function (_) {
     if (!activePalette) {
       return
     }
-    console.log(index)
 
     const snapshot = getSnapshot()
     const existingPalette = snapshot.palettes.find(p => p.id === activePalette.id)
-    console.log(activePalette.colors)
     const activeColor = activePalette.colors[index]
-    console.log(activeColor)
     existingPalette.colors = existingPalette.colors.filter(c => c.id !== activeColor.id)
     activePalette.colors = existingPalette.colors
     commit(snapshot)
