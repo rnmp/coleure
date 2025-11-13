@@ -125,9 +125,10 @@ define(['./goodies'], function (_) {
 
     const snapshot = getSnapshot()
     const existingPalette = snapshot.palettes.find(p => p.id === activePalette.id)
+    console.log(activePalette.colors)
     const activeColor = activePalette.colors[index]
     console.log(activeColor)
-    existingPalette.colors = existingPalette.colors.filter(c => c.id === activeColor.id)
+    existingPalette.colors = existingPalette.colors.filter(c => c.id !== activeColor.id)
     activePalette.colors = existingPalette.colors
     commit(snapshot)
 
