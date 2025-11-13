@@ -56,9 +56,11 @@ define(['./goodies'], function (_) {
   }
 
   function addColor(data) {
+    const counter = localStorage.getItem('paletteNameCounter') || '1'
+
     activePalette = activePalette || {
       id: crypto.randomUUID(),
-      name: 'New Palette',
+      name: `No. ${counter}`,
       colors: []
     }
 
@@ -84,6 +86,7 @@ define(['./goodies'], function (_) {
       existingPalette.colors = activePalette.colors
     } else {
       snapshot.palettes.push(activePalette)
+      localStorage.setItem('paletteNameCounter', JSON.stringify(parseInt(counter) + 1))
     }
     commit(snapshot)
 
