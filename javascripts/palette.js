@@ -24,8 +24,17 @@ define(['./goodies'], function (_) {
     return event.dataTransfer.dropEffect = 'copy'
   }
 
-  function updateTitle(number) {
-    _.id('activePalette').innerHTML = activePalette.name ? activePalette.name : "No. " + activePalette.id
+  function updateTitle() {
+    editableText(_.id('activePalette'), activePalette.name, (newValue) => {
+      const finalValue = newValue.trim()
+      if (!finalValue) {
+        return
+      }
+      const snapshot = getSnapshot()
+      const existingPalette = snapshot.palettes.find(p => p.id === activePalette.id)
+      existingPalette.name = finalValue
+      commit(snapshot)
+    })
   }
 
   let colorData = { palettes: [] }
@@ -79,7 +88,6 @@ define(['./goodies'], function (_) {
     commit(snapshot)
 
     updateTitle()
-    _.show(_.id('renameButton'), 'inline-block')
 
     data.origin = 'palette'
     paletteColors.prepend(makeColor(data))
@@ -192,6 +200,29 @@ define(['./goodies'], function (_) {
 
     return i
   }
+
+  function editableText(node, text, save) {
+    node.classList.toggle('editable-text', true)
+
+    const input = _.create('input')
+    input.value = text
+    input.onblur = () => {
+      if (input.value === text) {
+        return
+      }
+      save(input.value)
+    }
+    input.onkeydown = (event) => {
+      if (event.key === 'Enter') {
+        input.blur()
+      }
+    }
+
+    node.replaceChildren(input)
+
+    return node
+  }
+
 
   function initializePalette() {
     const currentPaletteId = localStorage.getItem('currentPaletteId')

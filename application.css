@@ -488,6 +488,13 @@ button#save-palette {
   transform: rotate(45deg);
 }
 
+#activePalette input {
+  appearance: none;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+}
+
 #mixControls {
   margin-left: -65px;
   background-color: #232323;
