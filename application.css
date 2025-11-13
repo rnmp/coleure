@@ -747,12 +747,18 @@ input[type=range]::-webkit-slider-thumb {
   /* Use with '&times;' */
   width: 30px;
   height: 30px;
-  line-height: 1.12em;
-  text-align: center;
   font-size: 28px;
+  line-height: 1rem;
   color: #fff;
   background: #232323;
   background: rgba(0,0,0,.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.close span {
+  transform: translateY(-10%);
+  pointer-events: none;
 }
 .close:hover {
   background: #111;
