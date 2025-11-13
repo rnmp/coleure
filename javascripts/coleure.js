@@ -10,8 +10,6 @@ window.addEventListener('load', function () {
       singleTemplate: '/assets/templates/test/single.html',
       doubleTemplate: '/assets/templates/test/double.html'
     });
-    palette.setup({
-      template: '/assets/templates/color.html'
-    });
+    palette.setup();
   });
 });

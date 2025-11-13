@@ -1,44 +1,31 @@
-define(['./goodies', './settings'], function (_, settings) {
-  let colorDrag,
-    colorDrop,
-    colorOver,
-    colorTemplate,
-    dropMessage,
-    insertColor,
-    paletteColorDrag,
-    paletteColorDrop,
-    paletteColorOver,
-    paletteColors,
-    palettesDropdownLabel,
-    palettesList,
-    replaceColors,
-    colorOrigin,
-    activePalette;
-  palettesDropdownLabel = null;
-  palettesList = null;
-  paletteColors = null;
-  dropMessage = null;
-  colorTemplate = null;
-  colorDrag = function (event) {
-    var color, data;
-    color = event.target;
-    colorOrigin = _.attr(color, 'data-origin');
-    data = {
+define(['./goodies'], function (_) {
+  const dropzone = _.id('palette')
+  const paletteColors = _.id('palette_colors')
+  const dropMessage = _.id('drop-message')
+  let activePalette = undefined
+  let colorOrigin = undefined
+
+  function colorDrag(event) {
+    const color = event.target
+    colorOrigin = _.attr(color, 'data-origin')
+    const data = {
       name: _.attr(color, 'data-name'),
       hex: _.attr(color, 'data-hex'),
       rgb: _.attr(color, 'data-rgb'),
       hsl: _.attr(color, 'data-hsl'),
       mixed: _.attr(color, 'data-mixed'),
-    };
-    event.dataTransfer.effectAllowed = 'copy';
-    return event.dataTransfer.setData('text', JSON.stringify(data));
-  };
-  colorOver = function (event) {
-    event.preventDefault();
-    return event.dataTransfer.dropEffect = 'copy';
-  };
-  var updateTitle = function (number) {
-    _.id('activePalette').innerHTML = activePalette.name ? activePalette.name : "No. " + activePalette.id;
+    }
+    event.dataTransfer.effectAllowed = 'copy'
+    return event.dataTransfer.setData('text', JSON.stringify(data))
+  }
+
+  function colorOver(event) {
+    event.preventDefault()
+    return event.dataTransfer.dropEffect = 'copy'
+  }
+
+  function updateTitle(number) {
+    _.id('activePalette').innerHTML = activePalette.name ? activePalette.name : "No. " + activePalette.id
   }
 
   let colorData = { palettes: [] }
@@ -59,7 +46,7 @@ define(['./goodies', './settings'], function (_, settings) {
     colorData = newData
   }
 
-  var addColor = function (data) {
+  function addColor(data) {
     console.log(activePalette)
     activePalette = activePalette || {
       id: crypto.randomUUID(),
@@ -68,9 +55,9 @@ define(['./goodies', './settings'], function (_, settings) {
     }
 
     const newColor = {
+      ...data,
       id: crypto.randomUUID(),
       palette_id: activePalette.id,
-      ...data,
     }
 
     localStorage.setItem('currentPaletteId', activePalette.id)
@@ -81,7 +68,7 @@ define(['./goodies', './settings'], function (_, settings) {
         newColor,
         ...(activePalette.colors || []),
       ]
-    };
+    }
 
     const snapshot = getSnapshot()
     const existingPalette = snapshot.palettes.find(p => p.id === activePalette.id)
@@ -92,91 +79,123 @@ define(['./goodies', './settings'], function (_, settings) {
     }
     commit(snapshot)
 
-    updateTitle();
+    updateTitle()
     _.show(_.id('renameButton'), 'inline-block')
 
-    _.template(colorTemplate, function (template) {
-      return insertColor(template, data);
-    });
-    _.attr(paletteColors.children.item(0), 'data-id', newColor.id);
-    _.hide(dropMessage);
+    data.origin = 'palette'
+    paletteColors.prepend(makeColor(data))
+    _.attr(paletteColors.children.item(0), 'data-id', newColor.id)
+    _.hide(dropMessage)
   }
-  colorDrop = function (event) {
-    var data;
-    event.preventDefault();
-    data = JSON.parse(event.dataTransfer.getData('text'));
-    data.index = activePalette?.colors.length;
-    data.id = null;
-    // TODO: we actually need to provide the proper id in case the user removes the color right away.
-    addColor(data);
-  };
-  paletteColorDrag = function (event) {
-    var index, paletteColor;
-    event.dataTransfer.effectAllowed = 'move';
-    paletteColor = event.target;
-    colorOrigin = _.attr(paletteColor, 'data-origin');
-    index = _.indexOf(paletteColor.parentNode.children, paletteColor);
-    return event.dataTransfer.setData('text', index);
-  };
-  paletteColorOver = function (event) {
-    event.preventDefault();
-    return event.dataTransfer.dropEffect = 'move';
-  };
-  paletteColorDrop = function (event) {
-    var index, origin;
-    event.preventDefault();
-    index = event.dataTransfer.getData('text');
+
+  function colorDrop(event) {
+    event.preventDefault()
+    const data = JSON.parse(event.dataTransfer.getData('text'))
+    data.index = activePalette?.colors.length
+    addColor(data)
+  }
+
+  function paletteColorDrag(event) {
+    var index, paletteColor
+    event.dataTransfer.effectAllowed = 'move'
+    paletteColor = event.target
+    colorOrigin = _.attr(paletteColor, 'data-origin')
+    index = _.indexOf(paletteColor.parentNode.children, paletteColor)
+    return event.dataTransfer.setData('text', index)
+  }
+
+  function paletteColorOver(event) {
+    event.preventDefault()
+    return event.dataTransfer.dropEffect = 'move'
+  }
+
+  function paletteColorDrop(event) {
+    event.preventDefault()
+    const index = event.dataTransfer.getData('text')
     if (colorOrigin == "palette") {
-      removeColor(index);
+      removeColor(index)
     }
-  };
-  var removeColor = function (index) {
+  }
+
+  function removeColor(index) {
     if (!activePalette) {
       return
     }
-
-    var visualColor = paletteColors.children.item(index)
-    activePalette.colors.splice(activePalette.colors.length - index - 1, 1);
-    visualColor.classList.add('deleted');
+    console.log(index)
 
     const snapshot = getSnapshot()
     const existingPalette = snapshot.palettes.find(p => p.id === activePalette.id)
-    existingPalette.colors = existingPalette.colors.filter(c => c.id === activePalette.colors[index].id)
+    const activeColor = activePalette.colors[index]
+    console.log(activeColor)
+    existingPalette.colors = existingPalette.colors.filter(c => c.id === activeColor.id)
+    activePalette.colors = existingPalette.colors
     commit(snapshot)
 
+    const visualColor = paletteColors.children.item(index)
+    visualColor.classList.add('deleted')
+
+
     setTimeout(() => {
-      _.remove(visualColor);
+      _.remove(visualColor)
       if (activePalette.colors.length == 0) {
         _.show(dropMessage)
       }
     }, 200)
   }
-  replaceColors = function (template) {
-    var color, _i, _len;
-    while (paletteColors.firstChild) {
-      paletteColors.removeChild(paletteColors.firstChild);
-    }
-    for (_i = 0, _len = activePalette.colors.length; _i < _len; _i++) {
-      color = activePalette.colors[_i];
+
+  function populateColors() {
+    paletteColors.innerHTML = ''
+    for (let ci = 0; ci < activePalette.colors.length; ci++) {
+      color = activePalette.colors[ci]
       if (!color.mixed) {
-        color.mixed = false;
+        color.mixed = false
       }
-      color.index = _i;
-      insertColor(template, color);
+      color.index = ci
+      color.origin = "palette"
+      paletteColors.append(makeColor(color))
     }
     if (paletteColors.children.length) {
-      return _.hide(dropMessage);
+      return _.hide(dropMessage)
     } else {
-      return _.show(dropMessage);
+      return _.show(dropMessage)
     }
-  };
-  insertColor = function (template, color) {
-    var el;
-    el = _.create('i');
-    paletteColors.insertBefore(el, paletteColors.firstChild);
-    color.origin = "palette";
-    el.outerHTML = template(color);
-  };
+  }
+
+  function makeColor(color) {
+    const i = _.create('i')
+    if (!color) {
+      i.className = 'item empty-color'
+      return i
+    }
+
+    i.draggable = true
+    i.className = 'item color'
+    i.dataset.name = color.name
+    i.dataset.hex = color.hex
+    i.dataset.rgb = color.rgb
+    i.dataset.hsl = color.hsl
+    i.dataset.id = color.id
+    i.dataset.index = color.index
+    i.dataset.mixed = color.mixed
+    i.dataset.origin = color.origin
+    i.style.background = `#${color.hex}`
+
+    const name = _.create('span')
+    name.className = 'name'
+    i.append(name)
+
+    if (color.mixed === true || color.mixed === 'true') {
+      const mixMark = _.create('strong')
+      mixMark.className = 'mix-mark'
+      mixMark.textContent = 'M'
+      name.append(mixMark)
+    }
+
+    name.append(color.name)
+
+    return i
+  }
+
   function initializePalette() {
     const currentPaletteId = localStorage.getItem('currentPaletteId')
     if (!currentPaletteId) {
@@ -188,51 +207,27 @@ define(['./goodies', './settings'], function (_, settings) {
     }
 
     activePalette = existingPalette
-    _.template(colorTemplate, replaceColors);
-    updateTitle();
-  }
-
-  var renamePalette = function () {
-    var data = {};
-    var newName = prompt("New name for palette");
-
-    if (newName != "") {
-      var request = new XMLHttpRequest();
-      request.onreadystatechange = function () {
-        if (request.readyState != 4 || request.status != 200) return;
-        var requestData = JSON.parse(request.responseText);
-      };
-      request.setRequestHeader('Accept', 'application/json');
-      request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-      request.setRequestHeader('X-CSRF-Token', getAuthToken());
-
-      data.name = newName;
-      request.send(_.serialize(data, 'palette'));
-      _.id('activePalette').innerHTML = newName;
-    }
+    populateColors()
+    updateTitle()
   }
 
   return {
     addColor: addColor,
     removeColor: removeColor,
-    setup: function (options) {
-      const dropzone = _.id('palette');
-      _.listen(dropzone, 'dragenter', colorOver);
-      _.listen(dropzone, 'dragover', colorOver);
-      _.listen(dropzone, 'drop', colorDrop);
+    setup: function () {
+      _.listen(dropzone, 'dragenter', colorOver)
+      _.listen(dropzone, 'dragover', colorOver)
+      _.listen(dropzone, 'drop', colorDrop)
 
-      _.listen(_.id('colors'), 'dragstart', colorDrag);
-      _.listen(_.id('subjects'), 'dragstart', colorDrag);
-      _.listen(_.id('renameButton'), 'mousedown', renamePalette);
-      paletteColors = _.id('palette_colors');
-      _.listen(paletteColors, 'dragstart', paletteColorDrag);
-      _.listen(_.id('colors'), 'dragenter', paletteColorOver);
-      _.listen(_.id('colors'), 'dragover', paletteColorOver);
-      _.listen(_.id('colors'), 'drop', paletteColorDrop);
-      dropMessage = _.id('drop-message');
-      colorTemplate = options.template;
+      _.listen(_.id('colors'), 'dragstart', colorDrag)
+      _.listen(_.id('subjects'), 'dragstart', colorDrag)
 
-      initializePalette();
+      _.listen(paletteColors, 'dragstart', paletteColorDrag)
+      _.listen(_.id('colors'), 'dragenter', paletteColorOver)
+      _.listen(_.id('colors'), 'dragover', paletteColorOver)
+      _.listen(_.id('colors'), 'drop', paletteColorDrop)
+
+      initializePalette()
     }
   }
-});
+})
