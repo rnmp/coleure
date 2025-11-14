@@ -311,7 +311,7 @@ define(['./goodies'], function (_) {
     palettesContainer.innerHTML = ''
 
     const newPalette = _.create('button')
-    newPalette.textContent = 'New palette'
+    newPalette.textContent = 'New'
     newPalette.onclick = () => {
       setActivePaletteId('')
       populateColors()
