@@ -41,13 +41,13 @@ define(['./goodies'], function (_) {
 
   function colorDrag(event) {
     const color = event.target
-    colorOrigin = _.attr(color, 'data-origin')
+    colorOrigin = color.dataset.origin
     const data = {
-      name: _.attr(color, 'data-name'),
-      hex: _.attr(color, 'data-hex'),
-      rgb: _.attr(color, 'data-rgb'),
-      hsl: _.attr(color, 'data-hsl'),
-      mixed: _.attr(color, 'data-mixed'),
+      name: color.dataset.name,
+      hex: color.dataset.hex,
+      rgb: color.dataset.rgb,
+      hsl: color.dataset.hsl,
+      mixed: color.dataset.mixed,
     }
     event.dataTransfer.effectAllowed = 'copy'
     return event.dataTransfer.setData('text', JSON.stringify(data))
@@ -109,7 +109,7 @@ define(['./goodies'], function (_) {
 
     data.origin = 'palette'
     paletteColors.prepend(makeColor(data))
-    _.attr(paletteColors.children.item(0), 'data-id', newColor.id)
+    paletteColors.children.item(0).dataset.id = newColor.id
     _.hide(dropMessage)
   }
 
@@ -130,7 +130,7 @@ define(['./goodies'], function (_) {
     var index, paletteColor
     event.dataTransfer.effectAllowed = 'move'
     paletteColor = event.target
-    colorOrigin = _.attr(paletteColor, 'data-origin')
+    colorOrigin = paletteColor.dataset.origin
     index = _.indexOf(paletteColor.parentNode.children, paletteColor)
     return event.dataTransfer.setData('text', index)
   }
