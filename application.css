@@ -257,6 +257,7 @@ svg {
 }
 
 #panels {
+  position: relative;
   width: 0;
   z-index: 2;
   opacity: 0;
@@ -267,10 +268,10 @@ svg {
 }
 #palettes {
   border-top: 2px solid #444;
-  padding-top: 20px;
-  padding-left: 20px;
+  padding-top: 16px;
   flex: 1;
   overflow: auto;
+  position: relative;
 }
 
 #color-tools {
@@ -282,7 +283,7 @@ svg {
   display: block;
   text-align: center;
   font-size: 14px;
-  font-weight: bold;
+  font-weight: 500;
   color: #fff;
   flex: 1;
   padding: 0.5rem 0;
@@ -1014,53 +1015,4 @@ a.activate-fullscreen {
 }
 a.activate-fullscreen:hover {
   background: #fff;
-}
-
-/* User page */
-.columns {
-  margin-bottom: 2em;
-  -webkit-columns: 4;
-  -moz-columns: 4;
-  -o-columns: 4;
-  columns: 4;
-}
-
-.user_page {
-  min-height: 100%;
-  overflow: scroll;
-  padding: 30px 40px;
-}
-.user_page h1 {
-  font-size: 36px;
-  margin-bottom: 10px;
-}
-.user_page .palette {
-  display: block;
-  overflow: hidden;
-  padding: 15px 0;
-  border-top: 2px solid #444;
-}
-.user_page .palette h2 {
-  font-size: 24px;
-  line-height: 1;
-  color: #fff;
-}
-.user_page .palette_options {
-  float: left;
-  width: 17.5%;
-}
-.user_page .palette_options a {
-  font-size: 16px;
-  font-weight: bold;
-  color: #999;
-  border-bottom: 1px solid #666;
-}
-.user_page .palette_options a:hover {
-  color: #fffef8;
-}
-.user_page .palette .color {
-  cursor: default;
-  width: 10%;
-  padding-bottom: 10%;
-  float: left;
 }

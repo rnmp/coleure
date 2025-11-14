@@ -265,12 +265,21 @@ define(['./goodies'], function (_) {
   }
 
   function makePaletteStrip(palette) {
+    const activePaletteId = getActivePaletteId()
+
     const paletteStrip = _.create('article')
-    paletteStrip.style.paddingTop = '16px'
+    paletteStrip.style.paddingTop = '8px'
+    paletteStrip.style.paddingBottom = '12px'
+    paletteStrip.style.paddingLeft = '20px'
+
+    if (palette.id === activePaletteId) {
+      paletteStrip.style.background = '#323232'
+    }
 
     const actionBar = _.create('header')
     actionBar.style.display = 'flex'
     actionBar.style.justifyContent = 'space-between'
+    actionBar.style.alignItems = 'center'
     paletteStrip.append(actionBar)
 
     const paletteTitle = _.create('h1')
@@ -278,8 +287,12 @@ define(['./goodies'], function (_) {
     actionBar.append(paletteTitle)
 
     const deleteButton = _.create('button')
-    deleteButton.className = 'secondary'
-    deleteButton.textContent = '×'
+    deleteButton.className = 'secondary close'
+    deleteButton.style.padding = '0'
+    deleteButton.style.fontWeight = '400'
+    const span = _.create('span')
+    span.textContent = '×'
+    deleteButton.append(span)
     deleteButton.onclick = () => {
       removePalette(palette)
     }
@@ -289,6 +302,7 @@ define(['./goodies'], function (_) {
     colors.style.display = 'grid'
     colors.style.gridAutoFlow = 'column'
     colors.style.height = '48px'
+    colors.style.background = '#444'
 
     for (const color of palette.colors) {
       colors.append(makeColor(color))
@@ -296,6 +310,9 @@ define(['./goodies'], function (_) {
     paletteStrip.append(colors)
 
     paletteStrip.onclick = () => {
+      if (activePaletteId === palette.id) {
+        return
+      }
       setActivePaletteId(palette.id)
       populateColors()
       populatePalettes()
@@ -310,15 +327,26 @@ define(['./goodies'], function (_) {
     const palettesContainer = _.id('palettes')
     palettesContainer.innerHTML = ''
 
+    const palettesHeader = _.create('header')
+    palettesHeader.style.padding = '0 20px 16px'
+    palettesHeader.style.display = 'flex'
+    palettesHeader.style.justifyContent = 'space-between'
+    palettesContainer.append(palettesHeader)
+
+    const palettesTitle = _.create('h1')
+    palettesTitle.textContent = 'Palettes'
+    palettesTitle.style.fontSize = '1.5rem'
+    palettesHeader.append(palettesTitle)
+
     const newPalette = _.create('button')
     newPalette.textContent = 'New'
     newPalette.onclick = () => {
       setActivePaletteId('')
       populateColors()
+      populatePalettes()
       updateTitle()
     }
-    palettesContainer.append(newPalette)
-
+    palettesHeader.append(newPalette)
 
     const palettes = getSnapshot().palettes
 
