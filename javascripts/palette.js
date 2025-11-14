@@ -279,7 +279,7 @@ define(['./goodies'], function (_) {
 
     const deleteButton = _.create('button')
     deleteButton.className = 'secondary'
-    deleteButton.textContent = 'd'
+    deleteButton.textContent = '×'
     deleteButton.onclick = () => {
       removePalette(palette)
     }
