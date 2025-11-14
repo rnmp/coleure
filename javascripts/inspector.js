@@ -412,6 +412,7 @@ define(['./goodies', './settings', './palette'], function (_, settings, palette)
         palette.addColor(data);
         _.hide(_.id('addToPaletteButton'));
         _.show(_.id('removeButton'));
+        _.id('removeButton').classList.add('active')
         data.index = 0;
       },
       remove: function () {
@@ -425,6 +426,7 @@ define(['./goodies', './settings', './palette'], function (_, settings, palette)
         if (subjectsCount === 1) {
           if (data.origin == "palette") {
             _.show(_.id('removeButton'));
+            _.id('removeButton').classList.add('active')
           } else {
             _.show(_.id('addToPaletteButton'));
           }

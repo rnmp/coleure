@@ -277,7 +277,7 @@ svg {
 
 #color-tools {
   display: flex;
-  padding: 0.5rem 0 0.5rem 20px;
+  padding: 0.5rem 0.5rem 0.5rem 20px;
 }
 
 .block-button {
@@ -288,6 +288,7 @@ svg {
   color: #fff;
   flex: 1;
   padding: 0.5rem 0;
+  line-height: 1.333;
 }
 
 .block-button.active {
