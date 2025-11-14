@@ -358,7 +358,7 @@ define(['./goodies'], function (_) {
     palettesContainer.innerHTML = ''
 
     const palettesHeader = _.create('header')
-    palettesHeader.style.padding = '0 20px 16px'
+    palettesHeader.style.padding = '0 20px 8px'
     palettesHeader.style.display = 'flex'
     palettesHeader.style.justifyContent = 'space-between'
     palettesContainer.append(palettesHeader)
@@ -370,6 +370,7 @@ define(['./goodies'], function (_) {
 
     const newPalette = _.create('button')
     newPalette.textContent = 'New'
+    newPalette.className = 'tertiary'
     newPalette.onclick = () => {
       setActivePaletteId('')
       populateColors()
