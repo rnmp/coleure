@@ -8,11 +8,41 @@ define(['./goodies'], function (_) {
   } catch (e) {
   }
 
+  let undos = []
+  let redos = []
+
+  function getHistoryCounts() {
+    return { undos: undos.length, redos: redos.length }
+  }
+
+  function undo() {
+    if (undos.length === 0) {
+      return
+    }
+    const snapshot = undos.pop()
+    commit(snapshot, { undoing: true })
+  }
+
+  function redo() {
+    if (redos.length === 0) {
+      return
+    }
+    const snapshot = redos.pop()
+    commit(snapshot)
+  }
+
   function getSnapshot() {
     return JSON.parse(JSON.stringify(colorData))
   }
 
-  function commit(newData) {
+  function commit(newData, opts = {}) {
+    if (opts.undoing) {
+      redos.push(colorData)
+    } else {
+      undos.push(colorData)
+      redos = []
+    }
+
     localStorage.setItem("coleure", JSON.stringify(newData))
     colorData = newData
   }
@@ -376,6 +406,21 @@ define(['./goodies'], function (_) {
       _.listen(_.id('colors'), 'dragenter', paletteColorOver)
       _.listen(_.id('colors'), 'dragover', paletteColorOver)
       _.listen(_.id('colors'), 'drop', paletteColorDrop)
+
+      _.id('panel_toggle').onclick = () => {
+        _.id('app').classList.toggle('active-panels');
+      }
+
+      _.id('undo').onclick = () => {
+        undo()
+        populatePalettes()
+        initializePalette()
+      }
+      _.id('redo').onclick = () => {
+        redo()
+        populatePalettes()
+        initializePalette()
+      }
 
       populatePalettes()
       initializePalette()

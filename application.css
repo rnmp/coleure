@@ -305,27 +305,46 @@ button#save-palette {
 }
 
 
-#palette {
-  padding: 20px;
-}
-#palette, #palette .select,
-#palette .select::before {
+#palette, 
+#palette .select::before, 
+#app_controls::before {
   background: #323232;
 }
 #palette {
   width: 360px;
-  padding-right: 0;
-  padding-bottom: 125px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 4;
+}
+#palette_colors {
+  flex: 1;
+  overflow-y: auto;
+  position: relative;
+  padding-left: 20px;
+  padding-top: 20px;
+  z-index: 1;
+}
+#app_controls {
+  position: relative;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  padding: 18px 20px 16px;
+}
+
+#app_controls::before {
+  content: '';
+  position: absolute;
+  top: 100%;
   right: 0;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  z-index: 3;
+  left: 0;
+  height: 5px;
+  opacity: 0.3;
 }
 #palette .select {
-  position: fixed;
-  width: 360px;
-  right: 0;
-  bottom: 0;
+  position: relative;
   z-index: 4;
   padding: 20px;
   padding-bottom: 0;
@@ -334,11 +353,11 @@ button#save-palette {
   content: '';
   position: absolute;
   bottom: 100%;
-  width: 100%;
+  right: 0;
   left: 0;
   height: 5px;
   margin-bottom: -1px;
-  opacity: 0.2;
+  opacity: 0.3;
 }
 #palette h1 {
   font-size: 24px;
@@ -578,10 +597,8 @@ input[type=range]::-webkit-slider-thumb {
   position: relative;
   height: 100%;
   text-align: center;
-  margin-right: 20px;
+  margin: 0 20px;
   border: 2px dashed #666;
-  -webkit-animation: opacity 0.2s ease-in-out;
-  -o-animation: opacity 0.2s ease-in-out;
   animation: opacity 0.2s ease-in-out;
 }
 .dropzone p {
