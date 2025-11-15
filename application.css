@@ -37,19 +37,26 @@ aside, footer, header, section {
   display: block;
 }
 
-button.join, button.secondary,
+button {
+  appearance: none;
+  background: unset;
+  font: inherit;
+}
+
+.button.join,
+.button.secondary,
 a.button.secondary {
   background: #111;
   color: #999;
 }
-button.secondary {
+.button.secondary {
   color: #fff;
 }
-button.tertiary {
+.button.tertiary {
   color: #999;
   background: transparent;
 }
-button, button.active, button[data-state=active],
+.button, .button.active, button[data-state=active],
 a.button {
   display: inline-block;
   padding: 5px 10px;
@@ -61,43 +68,13 @@ a.button {
   background: #fff;
   cursor: pointer;
 }
-button.back, a.button.back {
-  position: relative;
-  height: 30px;
-  line-height: 30px;
-  padding: 0 10px;
-  margin-left: 15px;
-}
-button.back::before, a.button.back::before {
-  content: '';
-  position: absolute;
-  right: 100%;
-  width: 0;
-  height: 0;
-  border: 15px solid transparent;
-  border-right-color: #fff;
-  border-left: none;
-}
+
 kbd {
   padding: 2px 5px;
   word-spacing: -0.3em;
   font-family: monaco, monospace;
   color: #fff;
   background: #000;
-}
-
-.right {
-  float: right;
-}
-.clear:before,
-.clear:after {
-  content: "\0020";
-  display: block;
-  height: 0;
-  visibility: hidden;
-}
-.clear:after {
-  clear: both;
 }
 
 /* Logo */
@@ -192,28 +169,6 @@ svg {
   z-index: 2;
   background: #232323;
 }
-#user_menu .block-button {
-  margin-bottom: 0;
-  border: 0;
-  font-size: 12px;
-  padding-right: 0;
-  padding-left: 0;
-  padding-top: 13px;
-}
-.block-button.disabled {
-  color: #999;
-  cursor: default;
-}
-.block-button.disabled.active {
-  color: #fff;
-  cursor: pointer;
-}
-.block-button .price {
-  display: inline-block;
-  padding: 2px 5px;
-  color: #fff;
-  background: #eb0079;
-}
 #colors {
   flex: 1;
   overflow-x: hidden;
@@ -282,7 +237,7 @@ svg {
   padding: 0.5rem 0.5rem 0.5rem 20px;
 }
 
-.block-button {
+.color-tool {
   display: block;
   text-align: center;
   font-size: 14px;
@@ -293,18 +248,12 @@ svg {
   line-height: 1.333;
 }
 
-.block-button.active {
-  background: #444;
+.color-tool[disabled] {
+  opacity: 0.5;
 }
 
-button#save-palette {
-  display: block;
-  width: 100%;
-  padding: 10px 0;
-  margin-bottom: 15px;
-  font-size: 14px;
-  background: #232323;
-  color: #fff;
+.color-tool.active {
+  background: #444;
 }
 
 
@@ -369,63 +318,57 @@ button#save-palette {
 #palette .active-palette {
   margin-right: 5px;
 }
-/*#palette button {
-  position: relative;
-  top: -0.3em;
-  padding: 3px 5px;
-  font-size: 0.4166em;
-}*/
-  #palette h2 {
-    margin-bottom: -0.39em;
-    font-size: 48px;
-    line-height: 1;
-    color: #fff;
-  }
+#palette h2 {
+  margin-bottom: -0.39em;
+  font-size: 48px;
+  line-height: 1;
+  color: #fff;
+}
 
-  #palette_colors .color {
-    display: block;
-    float: none;
-    height: 85px;
-    margin-bottom: 20px;
-    /* animation: 0.25s scalemation; */
-    transition: all 0.2s ease;
-  }
-  #palette_colors .color.deleted {
-    height: 0;
-    opacity: 0;
-    -webkit-transform: scale(0.5);
-    -moz-transform: scale(0.5);
-    -ms-transform: scale(0.5);
-    -o-transform: scale(0.5);
-    transform: scale(0.5);
-  }
-  #palette_colors .name {
-    display: block;
-    position: absolute;
-    top: -20px; left: 20px;
-    font-size: 24px;
-    font-style: normal;
-    font-weight: bold;
-    color: #fff;
-    pointer-events: none;
-    white-space: nowrap;
-  }
-  .mix-mark {
-    color: #ccc;
-  }
-  .project-info {
-    border-top: 2px solid #444;
-    margin-top: 20px;
-    padding: 10px 20px 85px 0;
-    color: #999;
-  }
-  .project-info p + p {
-    margin-top: 0.75em;
-  }
-  .project-info a {
-    color: #fff;
-    background: #232323;
-  }
+#palette_colors .color {
+  display: block;
+  float: none;
+  height: 85px;
+  margin-bottom: 20px;
+  /* animation: 0.25s scalemation; */
+  transition: all 0.2s ease;
+}
+#palette_colors .color.deleted {
+  height: 0;
+  opacity: 0;
+  -webkit-transform: scale(0.5);
+  -moz-transform: scale(0.5);
+  -ms-transform: scale(0.5);
+  -o-transform: scale(0.5);
+  transform: scale(0.5);
+}
+#palette_colors .name {
+  display: block;
+  position: absolute;
+  top: -20px; left: 20px;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: bold;
+  color: #fff;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.mix-mark {
+  color: #ccc;
+}
+.project-info {
+  border-top: 2px solid #444;
+  margin-top: 20px;
+  padding: 10px 20px 85px 0;
+  color: #999;
+}
+.project-info p + p {
+  margin-top: 0.75em;
+}
+.project-info a {
+  color: #fff;
+  background: #232323;
+}
 
 *:focus {
   outline: none;
@@ -447,6 +390,17 @@ button#save-palette {
 #inspector {
   margin-top: 20px;
   margin-left: 20px;
+}
+
+#placeholder {
+  display: flex;
+  flex-direction: column;
+  background: #444;
+  height: 343px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: #999;
 }
 #preview {
   position: relative;
@@ -992,41 +946,4 @@ i.menu-schemer {
   font-size: 16px;
   line-height: 1.5;
   color: #ccc;
-}
-.palette-options {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  z-index: 9;
-}
-#fullscreen {
-  width: 100%;
-}
-#fullscreen:target {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  height: 100%;
-  margin-left: 0;
-}
-#fullscreen:target .color.item {
-  height: 100%;
-  margin: 0;
-}
-#fullscreen:target h1 {
-  display: none;
-}
-a.activate-fullscreen {
-  display: block;
-  margin: 50px auto;
-  width: 20%;
-  border: 2px solid #333;
-  border-radius: 50em;
-  text-align: center;
-  color: #666;
-  background-color: transparent;
-}
-a.activate-fullscreen:hover {
-  background: #fff;
 }

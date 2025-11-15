@@ -336,7 +336,7 @@ define(['./goodies', './inspector'], function (_, inspector) {
     actionBar.append(paletteTitle)
 
     const deleteButton = _.create('button')
-    deleteButton.className = 'secondary close'
+    deleteButton.className = 'button secondary close'
     deleteButton.style.padding = '0'
     deleteButton.style.fontWeight = '400'
     const span = _.create('span')
@@ -389,7 +389,7 @@ define(['./goodies', './inspector'], function (_, inspector) {
 
     const newPalette = _.create('button')
     newPalette.textContent = 'New'
-    newPalette.className = 'tertiary'
+    newPalette.className = 'button tertiary'
     newPalette.onclick = () => {
       setActivePaletteId('')
       populateColors()
@@ -526,7 +526,6 @@ define(['./goodies', './inspector'], function (_, inspector) {
 
       _.id('panel_toggle').onclick = () => {
         _.id('app').classList.toggle('active-panels');
-        inspector.selectColor()
       }
 
       _.id('undo').onclick = () => {

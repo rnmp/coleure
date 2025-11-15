@@ -16,9 +16,24 @@ define(['./keyboard', './settings', './inspector', './goodies'], function (keybo
     return clipboard_handler.select();
   };
   currentColor = '';
+
+  //   function updateSelectColorDialogColors(node) {
+  //     const background = _.attr(node, 'data-hex')
+  //     const dialog = _.id('select_color_dialog')
+  //     dialog.style.backgroundColor = "#" + background;
+
+  //     const isLight = Color('#' + background).light()
+  //     if (isLight) {
+  //       dialog.style.color = "#232323"
+  //     } else {
+  //       dialog.style.color = "#fff"
+  //     }
+  //   }
+
   verifyIfColor = function (event) {
     if (event.target.classList.contains(colors_class)) {
       currentColor = event;
+      // updateSelectColorDialogColors(event.target)
       return hoverColor(currentColor.target);
     }
   };
@@ -28,10 +43,9 @@ define(['./keyboard', './settings', './inspector', './goodies'], function (keybo
       formatSettingsStatus ? format_status.classList.remove('active') : format_status.classList.add('active');
       formatSettingsStatus = !formatSettingsStatus;
     };
-  if (_.id('colors')) { _.listen(_.id('colors'), 'mouseover', verifyIfColor); }
-  if (_.id('panels')) { _.listen(_.id('panels'), 'mouseover', verifyIfColor); }
-  if (_.id('palette')) { _.listen(_.id('palette'), 'mouseover', verifyIfColor); }
-  if (_.id('not_editor')) { _.listen(_.id('not_editor'), 'mouseover', verifyIfColor); }
+
+  document.addEventListener('mouseover', verifyIfColor)
+
   _.listen(format_status, 'click', toggleSettings);
 
   canvas = document.createElement('canvas');

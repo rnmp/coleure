@@ -141,11 +141,11 @@ define(['./goodies', './settings', './palette'], function (_, settings, palette)
           mixMode.exit(); // TODO: make this more smart for future color options (aka edit, add to palette, etc.)
           editPanel.exit();
           if (compareModeStatus == false) {
-            _.id('compareModeButton').classList.add('active')
+            _.id('compare_color').classList.add('active')
             _.id('app').classList.add('active-mode');
             _.id('app').classList.add('active-compare-mode');
           } else {
-            _.id('compareModeButton').classList.remove('active')
+            _.id('compare_color').classList.remove('active')
             if (mixModeStatus == false) { _.id('app').classList.remove('active-mode') }
             _.id('app').classList.remove('active-compare-mode');
           }
@@ -158,7 +158,7 @@ define(['./goodies', './settings', './palette'], function (_, settings, palette)
         exit: function () {
           if (mixModeStatus == false) { _.id('app').classList.remove('active-mode') }
           _.id('app').classList.remove('active-compare-mode');
-          _.id('compareModeButton').classList.remove('active')
+          _.id('compare_color').classList.remove('active')
           compareModeStatus = false;
           _.unlisten(_.id('colors'), 'mouseover', updateDialogBackground);
           _.unlisten(_.id('palette_colors'), 'mouseover', updateDialogBackground);
@@ -183,11 +183,11 @@ define(['./goodies', './settings', './palette'], function (_, settings, palette)
           if (mixModeStatus == false) {
             _.id('app').classList.add('active-mode');
             _.id('app').classList.add('active-mix-mode');
-            _.id('mixModeButton').classList.add('active');
+            _.id('mix_color').classList.add('active');
           } else {
             if (compareModeStatus == false) { _.id('app').classList.remove('active-mode') }
             _.id('app').classList.remove('active-mix-mode');
-            _.id('mixModeButton').classList.remove('active');
+            _.id('mix_color').classList.remove('active');
           }
           mixModeStatus = !mixModeStatus;
 
@@ -198,7 +198,7 @@ define(['./goodies', './settings', './palette'], function (_, settings, palette)
         exit: function () {
           if (compareModeStatus == false) { _.id('app').classList.remove('active-mode') }
           _.id('app').classList.remove('active-mix-mode');
-          _.id('mixModeButton').classList.remove('active');
+          _.id('mix_color').classList.remove('active');
           mixModeStatus = false;
           _.unlisten(_.id('colors'), 'mouseover', updateDialogBackground);
           _.unlisten(_.id('palette_colors'), 'mouseover', updateDialogBackground);
@@ -280,7 +280,7 @@ define(['./goodies', './settings', './palette'], function (_, settings, palette)
       return {
         init: function () {
           this.setup;
-          _.id('editPanelButton').classList.add('active');
+          _.id('edit_color').classList.add('active');
           _.show(panel);
 
           // TODO: This is hacky code that makes sure _.show(panel) is executed before and not at the same time.
@@ -289,7 +289,7 @@ define(['./goodies', './settings', './palette'], function (_, settings, palette)
         },
         exit: function () {
           _.unlisten(window, 'keydown', function (e) { if (e.keyCode == 27) { editPanel.exit() } })
-          _.id('editPanelButton').classList.remove('active');
+          _.id('edit_color').classList.remove('active');
           panel.classList.remove('active');
           setTimeout(function () { _.hide(panel); }, 300);
           editPanelStatus = false;
@@ -299,9 +299,9 @@ define(['./goodies', './settings', './palette'], function (_, settings, palette)
         },
         setup: function () {
           if (subjectsCount == 2) {
-            _.hide(_.id('editPanelButton'));
+            _.hide(_.id('edit_color'));
           } else {
-            _.show(_.id('editPanelButton'))
+            _.show(_.id('edit_color'))
           }
           _.id('colorCode').value = initialHex = data.hex;
           _.id('colorName').value = initialName = data.name;
@@ -410,25 +410,25 @@ define(['./goodies', './settings', './palette'], function (_, settings, palette)
     return {
       add: function () {
         palette.addColor(data);
-        _.hide(_.id('addToPaletteButton'));
-        _.show(_.id('removeButton'));
-        _.id('removeButton').classList.add('active')
+        _.hide(_.id('add_color'));
+        _.show(_.id('remove_color'));
+        _.id('remove_color').classList.add('active')
         data.index = 0;
       },
       remove: function () {
         palette.removeColor(data.index);
-        _.hide(_.id('removeButton'));
-        _.show(_.id('addToPaletteButton'));
+        _.hide(_.id('remove_color'));
+        _.show(_.id('add_color'));
       },
       setup: function () {
-        _.hide(_.id('addToPaletteButton'));
-        _.hide(_.id('removeButton'));
+        _.hide(_.id('add_color'));
+        _.hide(_.id('remove_color'));
         if (subjectsCount === 1) {
           if (data.origin == "palette") {
-            _.show(_.id('removeButton'));
-            _.id('removeButton').classList.add('active')
+            _.show(_.id('remove_color'));
+            _.id('remove_color').classList.add('active')
           } else {
-            _.show(_.id('addToPaletteButton'));
+            _.show(_.id('add_color'));
           }
         }
       },
@@ -440,6 +440,13 @@ define(['./goodies', './settings', './palette'], function (_, settings, palette)
       var attribute, clickedColor, colorTemplate, length;
       clickedColor = event.target;
 
+      _.id('compare_color').disabled = false
+      _.id('mix_color').disabled = false
+      _.id('edit_color').disabled = false
+      _.id('add_color').disabled = false
+      _.id('preview').style.display = 'block'
+      _.id('placeholder').style.display = 'none'
+
       // prevents any empty color from being selected
       if (!clickedColor.classList.contains('color')) {
         return;
@@ -449,6 +456,7 @@ define(['./goodies', './settings', './palette'], function (_, settings, palette)
         compareMode.exit();
         mixMode.exit();
       }
+
 
       // the attributes of the clicked color
       attribute = clickedColor.getAttribute.bind(clickedColor);
@@ -523,19 +531,26 @@ define(['./goodies', './settings', './palette'], function (_, settings, palette)
       _.listen(_.id('colors'), 'click', this.selectColor);
       _.listen(_.id('palette_colors'), 'click', this.selectColor);
 
+      _.id('compare_color').disabled = true
+      _.id('mix_color').disabled = true
+      _.id('edit_color').disabled = true
+      _.id('add_color').disabled = true
+      _.id('remove_color').style.display = 'none'
+      _.id('preview').style.display = 'none'
+
       editPanel.exit();
       _.listen(_.id('subjects'), 'click', removeColor);
       _.listen(_.id('cancelMix'), 'click', mixPanel.exit);
       _.listen(_.id('mixButton'), 'click', mixPanel.init);
       _.listen(_.id('selectMix'), 'click', selectColor);
-      _.listen(_.id('compareModeButton'), 'click', compareMode.init);
+      _.listen(_.id('compare_color'), 'click', compareMode.init);
       _.listen(_.id('exitCompareModeButton'), 'click', compareMode.exit)
-      _.listen(_.id('mixModeButton'), 'click', mixMode.init);
+      _.listen(_.id('mix_color'), 'click', mixMode.init);
       _.listen(_.id('exitMixModeButton'), 'click', mixMode.exit);
-      _.listen(_.id('editPanelButton'), 'click', editPanel.toggle);
+      _.listen(_.id('edit_color'), 'click', editPanel.toggle);
       _.listen(_.id('exitEditPanelButton'), 'click', editPanel.exit);
-      _.listen(_.id('addToPaletteButton'), 'click', paletteOptions.add);
-      _.listen(_.id('removeButton'), 'click', paletteOptions.remove);
+      _.listen(_.id('add_color'), 'click', paletteOptions.add);
+      _.listen(_.id('remove_color'), 'click', paletteOptions.remove);
     }
   };
 });
