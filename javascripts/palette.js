@@ -1,4 +1,4 @@
-define(['./goodies'], function (_) {
+define(['./goodies', './inspector'], function (_, inspector) {
   let colorData = { palettes: [] }
   try {
     const parsedColorData = JSON.parse(localStorage.getItem('coleure'))
@@ -156,13 +156,28 @@ define(['./goodies'], function (_) {
     addColor(data)
   }
 
+  let dragSession = {}
+
   function paletteColorDrag(event) {
-    var index, paletteColor
     event.dataTransfer.effectAllowed = 'move'
-    paletteColor = event.target
+    const paletteColor = event.target
+    paletteColor.style.opacity = '0'
+
+    const parent = Array.from(paletteColors.children)
+    const draggingIndex = parent.indexOf(paletteColor)
+
+    // Capture regions before any transforms
+    dragSession.regions = parent.map((el, i) => ({
+      index: i,
+      rect: el.getBoundingClientRect(),
+      element: el
+    }))
+    dragSession.draggingColor = paletteColor
+    dragSession.draggingIndex = draggingIndex
+    dragSession.insertionIndex = draggingIndex
+
     colorOrigin = paletteColor.dataset.origin
-    index = _.indexOf(paletteColor.parentNode.children, paletteColor)
-    return event.dataTransfer.setData('text', index)
+    return event.dataTransfer.setData('text', draggingIndex)
   }
 
   function paletteColorOver(event) {
@@ -404,12 +419,96 @@ define(['./goodies'], function (_) {
       _.listen(_.id('subjects'), 'dragstart', colorDrag)
 
       _.listen(paletteColors, 'dragstart', paletteColorDrag)
+      _.listen(paletteColors, 'dragover', (e) => {
+        e.preventDefault()
+        if (!dragSession.regions) return
+
+        // Find insertion index based on mouse Y position
+        let newInsertionIndex = dragSession.regions.length
+        for (let i = 0; i < dragSession.regions.length; i++) {
+          const region = dragSession.regions[i]
+          const midpoint = region.rect.top + region.rect.height / 2
+          if (e.clientY < midpoint) {
+            newInsertionIndex = i
+            break
+          }
+        }
+
+        // Only recalculate if insertion point changed
+        if (newInsertionIndex === dragSession.insertionIndex) return
+        dragSession.insertionIndex = newInsertionIndex
+
+        // Recalculate all transforms
+        dragSession.regions.forEach(({ index, element, rect }) => {
+          if (index === dragSession.draggingIndex) return
+
+          const shiftAmount = rect.height + 20
+          let shouldShift = false
+
+          if (dragSession.draggingIndex < dragSession.insertionIndex) {
+            // Dragging downward: shift elements between original and insertion up
+            shouldShift = index >= dragSession.draggingIndex && index < dragSession.insertionIndex
+          } else {
+            // Dragging upward: shift elements between insertion and original down
+            shouldShift = index < dragSession.draggingIndex && index >= dragSession.insertionIndex
+          }
+
+          element.style.transform = shouldShift
+            ? `translateY(${dragSession.draggingIndex < dragSession.insertionIndex ? -shiftAmount : shiftAmount}px)`
+            : ''
+        })
+      })
+      _.listen(paletteColors, 'drop', (e) => {
+        e.preventDefault()
+
+        // Reorder the palette colors if insertion point changed
+        if (dragSession.insertionIndex !== undefined && dragSession.insertionIndex !== dragSession.draggingIndex) {
+          const activePalette = getActivePalette()
+          if (activePalette) {
+            const snapshot = getSnapshot()
+            const existingPalette = snapshot.palettes.find(p => p.id === activePalette.id)
+
+            // Remove from old position
+            const [movedColor] = existingPalette.colors.splice(dragSession.draggingIndex, 1)
+
+            // Insert at new position (adjust if moving down)
+            const adjustedIndex = dragSession.insertionIndex > dragSession.draggingIndex
+              ? dragSession.insertionIndex - 1
+              : dragSession.insertionIndex
+            existingPalette.colors.splice(adjustedIndex, 0, movedColor)
+
+            commit(snapshot)
+
+            // Rearrange DOM elements instead of repopulating
+            const children = Array.from(paletteColors.children)
+            if (adjustedIndex >= children.length) {
+              paletteColors.appendChild(dragSession.draggingColor)
+            } else {
+              paletteColors.insertBefore(dragSession.draggingColor, children[adjustedIndex])
+            }
+          }
+        }
+
+        // Reset all transforms
+        if (dragSession.regions) {
+          dragSession.regions.forEach(({ element }) => {
+            element.style.transform = ''
+          })
+        }
+
+        if (dragSession.draggingColor) {
+          dragSession.draggingColor.style.opacity = '1'
+        }
+
+        dragSession = {}
+      })
       _.listen(_.id('colors'), 'dragenter', paletteColorOver)
       _.listen(_.id('colors'), 'dragover', paletteColorOver)
       _.listen(_.id('colors'), 'drop', paletteColorDrop)
 
       _.id('panel_toggle').onclick = () => {
         _.id('app').classList.toggle('active-panels');
+        inspector.selectColor()
       }
 
       _.id('undo').onclick = () => {
