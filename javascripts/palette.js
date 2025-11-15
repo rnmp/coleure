@@ -85,6 +85,10 @@ define(['./goodies', './inspector'], function (_, inspector) {
 
   function colorOver(event) {
     event.preventDefault()
+    if (dragSession.draggingColor) {
+      return event.dataTransfer.dropEffect = 'move'
+
+    }
     return event.dataTransfer.dropEffect = 'copy'
   }
 
@@ -486,10 +490,6 @@ define(['./goodies', './inspector'], function (_, inspector) {
               })
             }
 
-            if (dragSession.draggingColor) {
-              dragSession.draggingColor.style.opacity = '1'
-            }
-
             // Rearrange DOM elements instead of repopulating
             const children = Array.from(paletteColors.children)
             if (adjustedIndex >= children.length) {
@@ -501,18 +501,24 @@ define(['./goodies', './inspector'], function (_, inspector) {
                 children[adjustedIndex].before(dragSession.draggingColor)
               }
             }
-            setTimeout(() => {
-              if (dragSession.regions) {
-                dragSession.regions.forEach(({ element }) => {
-                  element.style.removeProperty('transition')
-                })
-              }
-              dragSession = {}
-            }, 200)
             populatePalettes()
           }
         }
+      })
 
+      _.listen(paletteColors, 'dragend', (e) => {
+        e.preventDefault()
+        if (dragSession.regions) {
+          dragSession.regions.forEach(({ element }) => {
+            element.style.transform = ''
+            element.style.removeProperty('transition')
+          })
+        }
+
+        if (dragSession.draggingColor) {
+          dragSession.draggingColor.style.opacity = '1'
+        }
+        dragSession = {}
       })
       _.listen(_.id('colors'), 'dragenter', paletteColorOver)
       _.listen(_.id('colors'), 'dragover', paletteColorOver)
