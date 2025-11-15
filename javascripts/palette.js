@@ -479,13 +479,8 @@ define(['./goodies', './inspector'], function (_, inspector) {
 
             commit(snapshot)
 
-            // Rearrange DOM elements instead of repopulating
-            const children = Array.from(paletteColors.children)
-            if (adjustedIndex >= children.length) {
-              paletteColors.appendChild(dragSession.draggingColor)
-            } else {
-              paletteColors.insertBefore(dragSession.draggingColor, children[adjustedIndex])
-            }
+            populateColors()
+            populatePalettes()
           }
         }
 
