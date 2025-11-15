@@ -53,7 +53,7 @@
             <div id="mixResult">
               <span id="mixWeightA">50%</span>
               <span id="mixWeightB">50%</span>
-              <button id="cancelMix" class="button join">Cancel</button><button id="selectMix" class="color">Select</button>
+              <button id="cancelMix" class="button join">Cancel</button><button id="selectMix" class="button color">Select</button>
             </div>
           </div>
           <div id="subjects"></div>
@@ -72,24 +72,24 @@
       </section>
       <aside id="editPanel" class="color-editor">
         <section class="top">
-          <header><label for="#">Code*</label></header>
+          <header><label for="#">Hex</label></header>
           <div><input type="text" id="colorCode"></div>
-        </section>
-        <section>
-          <header><label for="colorHueValue">H</label><input type="number" min="1" max="360" id="colorHueValue"></header>
-          <div><input id="colorHueRange" type="range" min="1" max="360" step="1"></div>
-        </section>
-        <section>
-          <header><label for="colorSaturationValue">S</label><input type="number" min="1" max="100" id="colorSaturationValue"></header>
-          <div><input id="colorSaturationRange" type="range" min="0" max="100" step="1"></div>
-        </section>
-        <section>
-          <header><label for="colorLightValue">L</label><input type="number" min="1" max="100" id="colorLightValue"></header>
-          <div><input id="colorLightRange" type="range" min="0" max="100" step="1"></div>
         </section>
         <section>
           <header><label for="#">Name</label></header>
           <div><input type="text" id="colorName"></div>
+        </section>
+        <section>
+          <header><label for="colorHueValue">H</label><input type="text" id="colorHueValue"></header>
+          <div><input id="colorHueRange" type="range" min="1" max="360" step="1"></div>
+        </section>
+        <section>
+          <header><label for="colorSaturationValue">S</label><input type="text" id="colorSaturationValue"></header>
+          <div><input id="colorSaturationRange" type="range" min="0" max="100" step="1"></div>
+        </section>
+        <section>
+          <header><label for="colorLightValue">L</label><input type="text" id="colorLightValue"></header>
+          <div><input id="colorLightRange" type="range" min="0" max="100" step="1"></div>
         </section>
         <section class="push-header">
           <button id="exitEditPanelButton" class="button secondary">Done</button>

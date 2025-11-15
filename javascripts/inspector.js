@@ -92,8 +92,8 @@ define(['./goodies', './settings', './palette'], function (_, settings, palette)
     return {
       init: function () {
         setTimeout(function () { _.hide(mixButton) }, 200);
-        _.attr(mixButton, 'class', 'active');
-        setTimeout(function () { _.show(mixControls); _.show(mixResult) }, 200);
+        _.attr(mixButton, 'class', 'button active');
+        setTimeout(function () { _.show(mixControls); mixResult.style.display = 'flex' }, 200);
         setMixResult(0.5);
         _.id('mixBalance').value = 0.5;
         _.listen(_.id('mixBalance'), 'input', function () { setMixResult(_.id('mixBalance').value) });
@@ -103,7 +103,7 @@ define(['./goodies', './settings', './palette'], function (_, settings, palette)
         _.hide(mixResult);
         _.hide(mixControls);
         _.show(mixButton);
-        _.attr(mixButton, 'class', 'not-active');
+        _.attr(mixButton, 'class', 'button not-active');
         if (subjectsCount < 2) {
           _.hide(panel)
         };
@@ -444,7 +444,7 @@ define(['./goodies', './settings', './palette'], function (_, settings, palette)
       _.id('mix_color').disabled = false
       _.id('edit_color').disabled = false
       _.id('add_color').disabled = false
-      _.id('preview').style.display = 'block'
+      _.id('preview').style.display = 'flex'
       _.id('placeholder').style.display = 'none'
 
       // prevents any empty color from being selected

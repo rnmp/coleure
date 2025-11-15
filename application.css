@@ -189,9 +189,6 @@ svg {
 }
 
 /* Colors */
-.item {
-  float: left;
-}
 .color {
   cursor: pointer;
 
@@ -376,6 +373,8 @@ svg {
 
 .color-preview {
   position: relative;
+  display: flex;
+  flex: 1;
 }
 .color-preview .close {
   position: absolute;
@@ -404,13 +403,12 @@ svg {
 }
 #preview {
   position: relative;
+  height: 200px;
+  display: flex;
 }
-#subjects[data-subjects="2"] .color-preview {
-  width: 50%;
-  float: left;
-}
-#subjects[data-subjects="2"] .color-preview .color {
-  padding-bottom: 100%;
+#subjects {
+  display: flex;
+  flex: 1;
 }
 .color-name {
   position: absolute;
@@ -420,6 +418,8 @@ svg {
   left: 20px;
   color: #fff;
   white-space: nowrap;
+  flex: 1;
+  display: flex;
 }
 #subjects[data-subjects="2"] .color-name {
   font-size: 24px;
@@ -476,6 +476,7 @@ input[type=range]::-webkit-slider-thumb {
   height: 30px;
   -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 #mixBalance {
   position: relative;
@@ -501,14 +502,11 @@ input[type=range]::-webkit-slider-thumb {
   bottom: 0;
   z-index: 3;
   margin-top: 15px;
-  padding: 20px;
-  text-align: right;
-  -webkit-animation: opacity .2s;
-  -o-animation: opacity .2s;
+  padding: 0.5rem;
+  display: flex;
   animation: opacity .2s;
-}
-#mixResult > button {
-  margin-top: 10px;
+  align-items: end;
+  justify-content: end;
 }
 
 #mixWeightA, #mixWeightB {
@@ -538,8 +536,8 @@ input[type=range]::-webkit-slider-thumb {
 }
 .log {
   position: relative;
-  padding: 5px 20px;
-  font-size: 18px;
+  padding: 5px 0.625rem;
+  font-weight: 500;
 }
 .subtitle {
   color: #999;
@@ -630,10 +628,16 @@ input[type=range]::-webkit-slider-thumb {
   padding: 5px 20px;
 }
 .color-editor section {
-  border-bottom: 1px solid #ddd;
+  display: flex;
+  border-bottom: 2px solid #eee;
+}
+.color-editor section:first-of-type {
+  border-bottom: none;
 }
 .color-editor section:last-of-type {
-  padding-bottom: 20px;
+  padding-top: .75rem;
+  padding-bottom: .75rem;
+  border-bottom: none;
 }
 .color-editor footer {
   padding-bottom: 10px;
@@ -643,16 +647,13 @@ input[type=range]::-webkit-slider-thumb {
 }
 .color-editor header {
   width: 100px;
-  float: left;
 }
 .color-editor section.push-header {
   padding-left: 120px;
 }
-.color-editor div {
-  overflow: hidden;
-}
 .color-editor div input[type=text] {
-  margin-top: 3px;
+  display: block;
+  width: 160px;
 }
 
 .color-editor label,
@@ -766,7 +767,7 @@ i.remove-icon {
 
 .contrast {
   position: absolute;
-  right: 20px;
+  right: 0.5rem;
   width: 20px;
   height: 20px;
   top: 50%;
