@@ -387,13 +387,7 @@ button#save-palette {
     float: none;
     height: 85px;
     margin-bottom: 20px;
-    -webkit-animation: 0.25s scalemation;
-    -moz-animation: 0.25s scalemation;
-    animation: 0.25s scalemation;
-    -webkit-transition: all 0.2s ease;
-    -moz-transition: all 0.2s ease;
-    -ms-transition: all 0.2s ease;
-    -o-transition: all 0.2s ease;
+    /* animation: 0.25s scalemation; */
     transition: all 0.2s ease;
   }
   #palette_colors .color.deleted {

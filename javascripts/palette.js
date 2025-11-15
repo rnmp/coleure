@@ -478,24 +478,41 @@ define(['./goodies', './inspector'], function (_, inspector) {
             existingPalette.colors.splice(adjustedIndex, 0, movedColor)
 
             commit(snapshot)
+            // Reset all transforms
+            if (dragSession.regions) {
+              dragSession.regions.forEach(({ element }) => {
+                element.style.transition = 'none'
+                element.style.transform = ''
+              })
+            }
 
-            populateColors()
+            if (dragSession.draggingColor) {
+              dragSession.draggingColor.style.opacity = '1'
+            }
+
+            // Rearrange DOM elements instead of repopulating
+            const children = Array.from(paletteColors.children)
+            if (adjustedIndex >= children.length) {
+              paletteColors.appendChild(dragSession.draggingColor)
+            } else {
+              if (dragSession.insertionIndex > dragSession.draggingIndex) {
+                children[adjustedIndex].after(dragSession.draggingColor)
+              } else {
+                children[adjustedIndex].before(dragSession.draggingColor)
+              }
+            }
+            setTimeout(() => {
+              if (dragSession.regions) {
+                dragSession.regions.forEach(({ element }) => {
+                  element.style.removeProperty('transition')
+                })
+              }
+              dragSession = {}
+            }, 200)
             populatePalettes()
           }
         }
 
-        // Reset all transforms
-        if (dragSession.regions) {
-          dragSession.regions.forEach(({ element }) => {
-            element.style.transform = ''
-          })
-        }
-
-        if (dragSession.draggingColor) {
-          dragSession.draggingColor.style.opacity = '1'
-        }
-
-        dragSession = {}
       })
       _.listen(_.id('colors'), 'dragenter', paletteColorOver)
       _.listen(_.id('colors'), 'dragover', paletteColorOver)
