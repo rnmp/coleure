@@ -176,17 +176,8 @@ svg {
 }
 
 /* Layout */
-#panels, #palette, #user_menu {
+#panels, #palette {
   transition: all .3s ease;
-}
-#user_menu {
-  width: 110px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  z-index: 2;
-  background: #232323;
 }
 #colors {
   flex: 1;
@@ -450,8 +441,8 @@ svg {
 }
 .color-preview .close {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 0.5rem;
+  right: 0.5rem;
   z-index: 99999;
 }
 .color-preview .color {
@@ -844,7 +835,7 @@ i.remove-icon {
 
 .contrast {
   position: absolute;
-  right: 0.5rem;
+  right: calc(0.5rem + 5px);
   width: 20px;
   height: 20px;
   top: 50%;
