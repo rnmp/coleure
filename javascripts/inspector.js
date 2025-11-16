@@ -548,7 +548,6 @@ define(['./goodies', './settings', './palette'], function (_, settings, palette)
       _.listen(_.id('mix_color'), 'click', mixMode.init);
       _.listen(_.id('exitMixModeButton'), 'click', mixMode.exit);
       _.listen(_.id('edit_color'), 'click', editPanel.toggle);
-      _.listen(_.id('exitEditPanelButton'), 'click', editPanel.exit);
       _.listen(_.id('add_color'), 'click', paletteOptions.add);
       _.listen(_.id('remove_color'), 'click', paletteOptions.remove);
     }
