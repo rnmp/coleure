@@ -8,3 +8,4 @@
 
 # Ignore foreman ENV config
 .env
+.DS_Store
