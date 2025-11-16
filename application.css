@@ -124,12 +124,12 @@ kbd {
   margin-bottom: -1.5em;
 }
 #format_status {
-  padding: 5px 15px;
-  line-height: 1;
+  padding: 0.5rem 0.75rem;
   background: #232323;
   color: #fff;
   cursor: pointer;
-
+  position: relative;
+  top: -1rem;
 }
 #format_status:hover, #format_status.active {
   background: #fff !important;
