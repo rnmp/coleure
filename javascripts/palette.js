@@ -377,18 +377,16 @@ define(['./goodies', './inspector'], function (_, inspector) {
     palettesContainer.innerHTML = ''
 
     const palettesHeader = _.create('header')
-    palettesHeader.style.padding = '0 20px 8px'
     palettesHeader.style.display = 'flex'
     palettesHeader.style.justifyContent = 'space-between'
     palettesContainer.append(palettesHeader)
 
     const palettesTitle = _.create('h1')
     palettesTitle.textContent = 'Palettes'
-    palettesTitle.style.fontSize = '1.5rem'
     palettesHeader.append(palettesTitle)
 
     const newPalette = _.create('button')
-    newPalette.textContent = 'New'
+    newPalette.textContent = '+'
     newPalette.className = 'button tertiary'
     newPalette.onclick = () => {
       setActivePaletteId('')

@@ -78,7 +78,9 @@ a.button.secondary {
 }
 .button, .button.active, .button[data-state=active],
 a.button {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 0.375rem 0.75rem;
   font-family: inherit;
   font-weight: bold;
@@ -234,10 +236,30 @@ svg {
 }
 #palettes {
   border-top: 2px solid #444;
-  padding-top: 12px;
+  padding-top: 0.5rem;
   padding-bottom: 1.5rem;
   overflow: auto;
   position: relative;
+}
+#palettes > header {
+  display: flex;
+  align-items: center;
+  padding-bottom: 0.5rem;
+  padding-right: 0.5rem;
+  padding-left: 1.25rem;
+}
+#palettes > header h1 {
+  text-transform: uppercase;
+  color: #999;
+  font-size: 0.875rem;
+}
+#palettes > header button {
+  padding: 0;
+  font-weight: 400;
+  line-height: 0.5;
+  width: 30px;
+  height: 30px;
+  font-size: 2rem;
 }
 
 #color-tools {
@@ -248,11 +270,10 @@ svg {
 .color-tool {
   display: block;
   text-align: center;
-  font-size: 14px;
+  font-size: 0.75rem;
   color: #fff;
   flex: 1;
   padding: 0.5rem 0;
-  line-height: 1.333;
 }
 
 .color-tool[disabled] {
@@ -351,7 +372,8 @@ svg {
 #palette_colors .name {
   display: block;
   position: absolute;
-  top: -20px; left: 20px;
+  top: -.75em;
+  left: 0.4em;
   font-size: 24px;
   font-style: normal;
   font-weight: bold;
@@ -423,7 +445,7 @@ svg {
   position: absolute;
   font-size: 2.5rem;
   top: -.75em;
-  left: 1rem;
+  left: 0.4em;
   color: #fff;
   white-space: nowrap;
   flex: 1;
@@ -444,8 +466,7 @@ svg {
   z-index: 4;
 }
 #mixButton {
-  padding-left: 0;
-  padding-right: 0;
+  padding: 0;
   text-align: center;
   width: 50px;
   height: 30px;
@@ -585,19 +606,21 @@ input[type=range]::-webkit-slider-thumb {
 .mode-dialog {
   height: 0;
   padding: 0;
-  line-height: 30px;
-  font-size: 18px;
   background: #fff;
   transition: padding 0.3s ease, height 0.3s ease;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 .active-compare-mode #compareModeDialog,
 .active-mix-mode #mixModeDialog {
   height: 45px;
-  padding: 8px 20px;
 }
 .mode-dialog button {
-  float: right;
+  position: absolute;
+  right: 8px;
 }
 
 .color-editor {
