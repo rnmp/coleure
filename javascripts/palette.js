@@ -134,6 +134,8 @@ define(['./goodies', './inspector'], function (_, inspector) {
       })
       localStorage.setItem('paletteNameCounter', JSON.stringify(parseInt(counter) + 1))
       setActivePaletteId(newPaletteId)
+      _.show(_.id('palette_menu_trigger'))
+      _.show(_.id('palette_menu'))
     }
 
     commit(snapshot)
@@ -237,6 +239,11 @@ define(['./goodies', './inspector'], function (_, inspector) {
         color.origin = "palette"
         paletteColors.append(makeColor(color))
       }
+      _.show(_.id('palette_menu_trigger'))
+      _.show(_.id('palette_menu'))
+    } else {
+      _.hide(_.id('palette_menu_trigger'))
+      _.hide(_.id('palette_menu'))
     }
 
     if (paletteColors.children.length) {
@@ -313,39 +320,19 @@ define(['./goodies', './inspector'], function (_, inspector) {
     updateTitle()
   }
 
+
   function makePaletteStrip(palette) {
     const activePaletteId = getActivePaletteId()
 
     const paletteStrip = _.create('article')
-    paletteStrip.style.paddingTop = '8px'
-    paletteStrip.style.paddingBottom = '12px'
+    paletteStrip.style.paddingTop = '12px'
+    paletteStrip.style.paddingBottom = '8px'
     paletteStrip.style.paddingLeft = '20px'
 
     if (palette.id === activePaletteId) {
       paletteStrip.style.background = '#323232'
     }
 
-    const actionBar = _.create('header')
-    actionBar.style.display = 'flex'
-    actionBar.style.justifyContent = 'space-between'
-    actionBar.style.alignItems = 'center'
-    paletteStrip.append(actionBar)
-
-    const paletteTitle = _.create('h1')
-    paletteTitle.textContent = palette.name
-    actionBar.append(paletteTitle)
-
-    const deleteButton = _.create('button')
-    deleteButton.className = 'button secondary close'
-    deleteButton.style.padding = '0'
-    deleteButton.style.fontWeight = '400'
-    const span = _.create('span')
-    span.textContent = '×'
-    deleteButton.append(span)
-    deleteButton.onclick = () => {
-      removePalette(palette)
-    }
-    actionBar.append(deleteButton)
 
     const colors = _.create('div')
     colors.style.display = 'grid'
@@ -357,6 +344,9 @@ define(['./goodies', './inspector'], function (_, inspector) {
       colors.append(makeColor(color))
     }
     paletteStrip.append(colors)
+    const paletteTitle = _.create('h1')
+    paletteTitle.textContent = palette.name
+    paletteStrip.append(paletteTitle)
 
     paletteStrip.onclick = () => {
       if (activePaletteId === palette.id) {
@@ -521,6 +511,13 @@ define(['./goodies', './inspector'], function (_, inspector) {
       _.listen(_.id('colors'), 'dragenter', paletteColorOver)
       _.listen(_.id('colors'), 'dragover', paletteColorOver)
       _.listen(_.id('colors'), 'drop', paletteColorDrop)
+      _.id('palette_delete_button').onclick = () => {
+        const activePalette = getActivePalette()
+        if (!activePalette) {
+          return
+        }
+        removePalette(activePalette)
+      }
 
       _.id('panel_toggle').onclick = () => {
         _.id('app').classList.toggle('active-panels');

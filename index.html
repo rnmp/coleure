@@ -85,11 +85,18 @@
         </div>
       </div>
       <div id="palette_colors" class="clear"></div>
-      <header class="select">
+      <header id="palette_header">
         <h1 class="subtitle">
           <span id="activePalette" class="active-palette">New</span>
         </h1>
-        <h2>Palette</h2>
+        <div id="palette_controls">
+          <h2>Palette</h2>
+          <button id="palette_menu_trigger" class="button tertiary" popovertarget="palette_menu" popovertargetaction="toggle">…</button>
+          <div id="palette_menu" popover>
+            <button id="palette_delete_button" class="button tertiary">Delete</button>
+            <button id="palette_copy_svg" class="button tertiary">Copy SVG</button>
+          </div>
+        </div>
       </header>
     </section>
   </main>
