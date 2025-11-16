@@ -314,6 +314,7 @@ svg {
   display: flex;
   align-items: center;
   padding: 18px 20px 16px;
+  gap: 1rem;
 }
 
 #app_controls::before {
@@ -874,7 +875,9 @@ i.menu-panel,
 i.menu-plus,
 i.menu-settings,
 i.menu-user,
-i.menu-schemer {
+i.menu-schemer,
+i.undo,
+i.redo {
   display: inline-block;
   cursor: pointer;
   background: no-repeat center;
@@ -919,6 +922,19 @@ i.menu-schemer {
   width: 31px;
   height: 23px;
   background-image: url('./images/icons/menu-schemer.png');
+}
+i.redo, i.undo {
+  width: 32px;
+  height: 32px;
+}
+i.redo {
+  background-image: url('./images/icons/redo@2x.png');
+}
+i.undo {
+  background-image: url('./images/icons/undo@2x.png');
+}
+#undo, #redo {
+  padding: 0;
 }
 
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {

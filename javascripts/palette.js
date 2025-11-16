@@ -534,6 +534,38 @@ define(['./goodies', './inspector'], function (_, inspector) {
         initializePalette()
       }
 
+      _.id('palette_copy_svg').onclick = () => {
+        const activePalette = getActivePalette()
+        if (!activePalette || !activePalette.colors.length) {
+          return
+        }
+
+        const colors = activePalette.colors
+        const swatchHeight = 200
+        const totalHeight = colors.length * swatchHeight
+        const width = 680
+
+        let svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${totalHeight}" viewBox="0 0 ${width} ${totalHeight}">\n`
+
+        colors.forEach((color, i) => {
+          const y = i * swatchHeight
+          const textColor = Color('#' + color.hex).light() ? '#232323' : '#fff'
+          svg += `  <rect x="0" y="${y}" width="${width}" height="${swatchHeight}" fill="#${color.hex}"/>\n`
+          svg += `  <text x="20" y="${y + 60}" font-family="Inter, system-ui, sans-serif" font-size="48" font-weight="700" fill="${textColor}">${color.name}</text>\n`
+        })
+
+        svg += '</svg>'
+
+        navigator.clipboard.writeText(svg).then(() => {
+          const button = _.id('palette_copy_svg')
+          const originalText = button.textContent
+          button.textContent = 'Copied'
+          setTimeout(() => {
+            button.textContent = originalText
+          }, 2000)
+        })
+      }
+
       populatePalettes()
       initializePalette()
     }
