@@ -371,15 +371,15 @@ svg {
   width: 180px;
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  padding: 0.5rem 0;
 }
 #palette_menu button {
   display: flex;
   width: 100%;
   justify-content: end;
+  height: 2.5rem;
 }
 #palette_delete_button {
+  border-bottom: 2px solid #eee;
   color: #f14d52;
 }
 #palette_controls :popover-open {
