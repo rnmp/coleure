@@ -426,7 +426,7 @@ svg {
   display: flex;
   flex-direction: column;
   background: #444;
-  height: 343px;
+  height: 332px;
   align-items: center;
   justify-content: center;
   gap: 0.75rem;
